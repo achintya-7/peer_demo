@@ -24,7 +24,8 @@ class Signaling {
 
   Future<String> createRoom(RTCVideoRenderer remoteRenderer) async {
     FirebaseFirestore db = FirebaseFirestore.instance;
-    DocumentReference roomRef = db.collection('rooms').doc('test');
+    DocumentReference roomRef = db.collection('rooms').doc();
+    int count = 0;
 
     log('Create PeerConnection with configuration: $configuration');
 
@@ -40,8 +41,9 @@ class Signaling {
     var callerCandidatesCollection = roomRef.collection('callerCandidates');
 
     peerConnection?.onIceCandidate = (RTCIceCandidate candidate) {
-      log('Got candidate: ${candidate.toMap()}');
+      log('Adding new candinate : $count');
       callerCandidatesCollection.add(candidate.toMap());
+      count++;
     };
     // Finish Code for collecting ICE candidate
 
